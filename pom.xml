@@ -4,7 +4,7 @@
     <name>SpringCRUDUtils</name>
     <groupId>gr.dsigned</groupId>
     <artifactId>SpringCRUDUtils</artifactId>
-    <version>0.3</version>
+    <version>0.4-SNAPSHOT</version>
     <packaging>jar</packaging>
     
     <organization>
