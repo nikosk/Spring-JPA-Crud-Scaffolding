@@ -31,7 +31,7 @@ public class ParameterizedCRUDController<E extends SystemEntity> {
         int sizeNo = size == null ? 50 : size.intValue();
         int pageNo = page == null ? 0 : (page.intValue());
         int offset = pageNo * sizeNo;
-        Integer itemNo = dao.countAll(entityClass);
+        Long itemNo = dao.countAll(entityClass);
         Pager pager = new Pager(request.getRequestURI(), itemNo.longValue(), Integer.valueOf(pageNo).longValue(), sizeNo);
         model.addAttribute("itemNo", itemNo);
         model.addAttribute("sizeNo", sizeNo);

@@ -17,7 +17,7 @@ public interface Dao<K, E> {
 
     public void merge(E entity);
 
-    public Integer countAll(Class<? extends SystemEntity> entity);
+    public Long countAll(Class<? extends SystemEntity> entity);
     
     public List<E> listAll(Class<? extends SystemEntity> entity, int maxNo, int offset);
     
