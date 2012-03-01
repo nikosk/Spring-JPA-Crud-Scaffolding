@@ -1,9 +1,7 @@
 package gr.dsigned.springcrudutils.strategies;
 
-
 import com.google.common.collect.Lists;
 import java.io.StringWriter;
-import java.lang.Class;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -26,21 +24,21 @@ import javax.xml.namespace.QName;
  * @author nk
  */
 public class XMLStrategy<T> implements RenderStrategy<T> {
+
     private List<Class> registeredTypes = Lists.<Class>newArrayList(CollectionWrapper.class, MapEntryWrapper.class, ArrayList.class, HashMap.class);
-    
+
     @Override
     public String render(T data) {
         return marshall(data);
     }
-    
-        
-    
+
     protected String marshall(T data) {
         if (data == null) {
             return null;
         }
         StringWriter sw = new StringWriter();
         try {
+            registeredTypes.add(data.getClass());
             JAXBContext context = JAXBContext.newInstance(registeredTypes.toArray(new Class[0]));            
             Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -57,10 +55,10 @@ public class XMLStrategy<T> implements RenderStrategy<T> {
     }
 
     private Object normalize(Object o) {
-        if(o == null){
+        if (o == null) {
             return null;
         }
-        Object toReturn = null;        
+        Object toReturn = null;
         if (Collection.class.isAssignableFrom(o.getClass())) {
             CollectionWrapper wrapper = new CollectionWrapper();
             Iterator i = ((Collection) o).iterator();

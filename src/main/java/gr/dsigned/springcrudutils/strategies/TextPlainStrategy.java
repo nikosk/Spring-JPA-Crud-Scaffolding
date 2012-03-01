@@ -18,7 +18,7 @@ public class TextPlainStrategy<T> implements RenderStrategy<T> {
 
     @Override
     public String render(T data) {        
-        return g.toJson(data);
+        return data.toString();
     }
 
     @Override
