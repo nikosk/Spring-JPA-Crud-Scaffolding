@@ -60,7 +60,7 @@ public class Pager {
     }
 
     public String getNextPage(){
-        if(currentPage + 1 > urls.size()){
+        if(currentPage + 1 >= urls.size()){
             return getLastPage();
         } else {
             return urls.get(currentPage+1);
