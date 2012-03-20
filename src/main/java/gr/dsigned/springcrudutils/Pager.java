@@ -1,5 +1,7 @@
 package gr.dsigned.springcrudutils;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,20 +12,20 @@ import java.util.List;
 public class Pager {
 
     String baseURL;
-    Long totalItemCount;
-    Long currentPage;
+    int totalItemCount;
+    int currentPage;
     int perPage;
-    private List<String> urls = new ArrayList<String>();
+    private List<String> urls;
 
-    public Pager(String baseURL, Long totalItemCount) {
+    public Pager(String baseURL, int totalItemCount) {
         this.baseURL = baseURL;
         this.totalItemCount = totalItemCount;
-        this.currentPage = 0L;
+        this.currentPage = 0;
         this.perPage = 10;
         init();
     }
 
-    public Pager(String baseURL, Long totalItemCount, Long currentPage) {
+    public Pager(String baseURL, int totalItemCount, int currentPage) {
         this.baseURL = baseURL;
         this.totalItemCount = totalItemCount;
         this.currentPage = currentPage;
@@ -31,7 +33,7 @@ public class Pager {
         init();
     }
 
-    public Pager(String baseURL, Long totalItemCount, Long currentPage, int perPage) {
+    public Pager(String baseURL, int totalItemCount, int currentPage, int perPage) {
         this.baseURL = baseURL;
         this.totalItemCount = totalItemCount;
         this.currentPage = currentPage;
@@ -40,20 +42,36 @@ public class Pager {
     }
 
     private void init() {
+        List<String> list = new ArrayList<String>();
         for (int i = 0; i < getTotalPageNumber(); i++) {
             if (i != 0) {
                 String url = getBaseURL() + "?page=" + i + "&sizeNo=" + perPage;
-                urls.add(url);
+                list.add(url);
             } else {
                 String url = getBaseURL() + "?sizeNo=" + perPage;
-                urls.add(url);
+                list.add(url);
             }
-
         }
+        urls = ImmutableList.copyOf(list);
     }
 
     public String getFirstPage() {
         return baseURL + "?sizeNo=" + perPage;
+    }
+
+    public String getNextPage(){
+        if(currentPage + 1 > urls.size()){
+            return getLastPage();
+        } else {
+            return urls.get(currentPage+1);
+        }
+    }
+    public String getPreviousPage(){
+        if(currentPage-1 > urls.size()){
+            return getFirstPage();
+        } else {
+            return urls.get(currentPage-1);
+        }
     }
 
     public String getLastPage() {
@@ -68,15 +86,14 @@ public class Pager {
         return baseURL;
     }
 
-    public void setBaseURL(String baseURL) {
-        this.baseURL = baseURL;
-    }
 
-    public Long getCurrentPage() {
+
+    public int getCurrentPage() {
         return currentPage;
     }
 
-    public void setCurrentPage(Long currentPage) {
+    public void setCurrentPage(int currentPage) {
+        Preconditions.checkPositionIndex(currentPage, getTotalPageNumber(), "Page number out of bounds.");
         this.currentPage = currentPage;
     }
 
@@ -84,20 +101,19 @@ public class Pager {
         return perPage;
     }
 
-    public void setPerPage(int perPage) {
-        this.perPage = perPage;
-    }
 
-    public Long getTotalItemCount() {
+    public int getTotalItemCount() {
         return totalItemCount;
     }
 
-    public void setTotalItemCount(Long totalItemCount) {
-        this.totalItemCount = totalItemCount;
-    }
 
     public List<String> getUrls() {
         return urls;
     }
-    
+
+    @Override
+    public String toString() {
+        return "Pager{" + "baseURL=" + baseURL + ", totalItemCount=" + totalItemCount + ", currentPage=" + currentPage + ", perPage=" + perPage + ", urls=" + urls + '}';
+    }
+
 }
