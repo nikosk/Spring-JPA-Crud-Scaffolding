@@ -4,38 +4,38 @@
     <name>SpringCRUDUtils</name>
     <groupId>gr.dsigned</groupId>
     <artifactId>SpringCRUDUtils</artifactId>
-    <version>0.8-SNAPSHOT</version>
+    <version>0.7</version>
     <packaging>jar</packaging>
-    
+
     <organization>
         <name>dsigned.gr</name>
         <url>http://dsigned.gr</url>
-    </organization>    
+    </organization>
     <url>https://github.com/nikosk/Spring-JPA-Crud-Scaffolding</url>
-    
+
     <issueManagement>
         <system>Github.org</system>
         <url>https://github.com/nikosk/Spring-JPA-Crud-Scaffolding/issues</url>
     </issueManagement>
-    
+
     <scm>
         <url>https://github.com/nikosk/Spring-JPA-Crud-Scaffolding</url>
         <developerConnection>scm:git:https://nikosk@github.com/nikosk/Spring-JPA-Crud-Scaffolding.git</developerConnection>
     </scm>
-    
+
     <distributionManagement>
         <repository>
             <id>repo</id>
             <url>https://github.com/nikosk/Spring-JPA-Crud-Scaffolding/raw/master/releases</url>
-        </repository>        
+        </repository>
     </distributionManagement>
-    
-   
+
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <dependencies>    
+    <dependencies>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>servlet-api</artifactId>

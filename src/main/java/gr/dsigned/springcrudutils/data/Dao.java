@@ -5,9 +5,9 @@ import java.util.List;
 
 public interface Dao<K, E> {
 
-    
 
-    public void persist(E entity);
+
+    public E persist(E entity);
 
     public void remove(E entity);
 
@@ -18,12 +18,12 @@ public interface Dao<K, E> {
     public void merge(E entity);
 
     public Long countAll(Class<? extends SystemEntity> entity);
-    
+
     public List<E> listAll(Class<? extends SystemEntity> entity, int maxNo, int offset);
-    
+
     public List<E> listAll();
 
     public SystemEntity findEntityById(Class<? extends SystemEntity> entity, K id);
 
-    
+
 }
