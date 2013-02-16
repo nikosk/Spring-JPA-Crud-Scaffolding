@@ -4,7 +4,7 @@
     <name>SpringCRUDUtils</name>
     <groupId>gr.dsigned</groupId>
     <artifactId>SpringCRUDUtils</artifactId>
-    <version>0.8</version>
+    <version>0.9</version>
     <packaging>jar</packaging>
 
     <organization>
@@ -83,6 +83,12 @@
             <version>1.4.2</version>
             <scope>provided</scope>
             <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>4.1.7.Final</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
