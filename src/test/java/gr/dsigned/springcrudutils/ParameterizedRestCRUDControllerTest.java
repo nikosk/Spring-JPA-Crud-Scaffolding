@@ -9,6 +9,8 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,8 +19,7 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -60,14 +61,14 @@ public class ParameterizedRestCRUDControllerTest {
         Assert.assertTrue(model.containsKey("items"));
         Assert.assertTrue(model.get("items") instanceof List);
         List items = (List) model.get("items");
-        Assert.assertEquals(items.size(),1);
+        Assert.assertEquals(items.size(), 1);
         Assert.assertTrue(model.containsKey("count"));
     }
 
     @Test
     public void testShow() throws Exception {
         when(mockDao.findEntityById(Person.class, 1l)).thenReturn(new Person());
-        controller.show(1l,model, request, response);
+        controller.show(1l, model, request, response);
         Assert.assertTrue(model.containsKey("item"));
         Assert.assertTrue(model.get("item") instanceof Person);
         Person person = (Person) model.get("item");
@@ -75,7 +76,7 @@ public class ParameterizedRestCRUDControllerTest {
 
     @Test
     public void testForm() throws Exception {
-        controller.form(model,request,response);
+        controller.form(model, request, response);
         Assert.assertTrue(model.containsKey("id"));
         Assert.assertTrue(model.containsKey("name"));
         Assert.assertTrue(model.containsKey("lastName"));
@@ -97,13 +98,54 @@ public class ParameterizedRestCRUDControllerTest {
         Assert.assertTrue(lastName.get("type").toString().equals("java.lang.String"));
     }
 
+    /**
+     * Method: update(E entity, BindingResult bindingResult, Map model, HttpServletRequest request, HttpServletResponse response)
+     */
+    @Test
+    public void testUpdate() throws Exception {
+        Person person = new Person();
+        BindingResult bindingResult = mock(BindingResult.class);
+        when(bindingResult.hasErrors()).thenReturn(Boolean.TRUE);
+        when(bindingResult.getAllErrors()).thenReturn(Lists.newArrayList(new ObjectError("error", "error")));
+        controller.update(person, bindingResult, model, request, response);
+        verify(response).setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        Assert.assertTrue(model.containsKey("item"));
+        Assert.assertTrue(model.containsKey("errors"));
+        // Valid response
+        when(bindingResult.hasErrors()).thenReturn(Boolean.FALSE);
+        controller.update(person, bindingResult, model, request, response);
+        verify(mockDao, times(1)).merge(person);
+    }
+
+    @Test
+    public void testCreate() throws Exception {
+        Person person = new Person();
+        BindingResult bindingResult = mock(BindingResult.class);
+        when(bindingResult.hasErrors()).thenReturn(Boolean.TRUE);
+        when(bindingResult.getAllErrors()).thenReturn(Lists.newArrayList(new ObjectError("error", "error")));
+        controller.create(person, bindingResult, model, request, response);
+        Assert.assertTrue(model.containsKey("item"));
+        Assert.assertTrue(model.containsKey("errors"));
+        verify(response).setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        // Valid response
+        when(bindingResult.hasErrors()).thenReturn(Boolean.FALSE);
+        controller.create(person, bindingResult, model, request, response);
+        verify(mockDao, times(1)).persist(person);
+    }
+
+
+    @Test
+    public void testDelete() throws Exception {
+
+    }
 
     public static class Person implements SystemEntity {
 
 
         private Long id;
-        @FieldType(value = "name",fieldLabel = "Όνομα")
+        @FieldType(value = "name", fieldLabel = "Όνομα")
         private String name;
+
         private String lastName;
 
         public Long getId() {

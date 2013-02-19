@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package gr.dsigned.springcrudutils.strategies;
 
 import org.junit.Test;
@@ -13,33 +9,29 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 /**
- *
- * @author nk
+ * Created by IntelliJ IDEA.
+ * User: nk
+ * Date: 2/19/13
+ * Time: 11:04 PM
  */
-public class XMLStrategyTest {
+public class JsonStrategyTest {
 
-    /**
-     * Test of render method, of class XMLStrategy.
-     */
     @Test
-    public void testRender() {
+    public void testRender() throws Exception {
         System.out.println("render");
         Object data = new TestDTO("test", Long.MAX_VALUE);
-        XMLStrategy instance = new XMLStrategy();
+        RenderStrategy instance = new JsonStrategy<TestDTO>();
         String result = instance.render(data);
         System.out.println("Result: " + result);
         assertNotNull(result);
     }
 
-    /**
-     * Test of setup method, of class XMLStrategy.
-     */
     @Test
-    public void testSetup() {
+    public void testSetup() throws Exception {
         System.out.println("setup");
         HttpServletResponse response = mock(HttpServletResponse.class);
-        XMLStrategy instance = new XMLStrategy();
+        RenderStrategy instance = new JsonStrategy<TestDTO>();
         instance.setup(response);
-        verify(response).setContentType("application/xml");
+        verify(response).setContentType("application/json;charset=UTF-8");
     }
 }

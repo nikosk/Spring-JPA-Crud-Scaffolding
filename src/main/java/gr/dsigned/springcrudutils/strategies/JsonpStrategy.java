@@ -14,6 +14,6 @@ public class JsonpStrategy<T> extends JsonStrategy<T> {
 
     @Override
     public String render(T data) {
-        return callback + "(" + g.toJson(data) + ");";
+        return callback + "(" + super.render(data) + ");";
     }
 }

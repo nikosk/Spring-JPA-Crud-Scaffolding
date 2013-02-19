@@ -1,20 +1,34 @@
 package gr.dsigned.springcrudutils.strategies;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
 
 /**
- *
  * @author nk
  */
 public class JsonStrategy<T> implements RenderStrategy<T> {
 
-    protected Gson g = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+    protected ObjectMapper mapper;
+
+    public JsonStrategy() {
+        this.mapper = new ObjectMapper();
+        mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+        mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    }
 
     @Override
     public String render(T data) {
-        return g.toJson(data);
+        try {
+            return mapper.writeValueAsString(data);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

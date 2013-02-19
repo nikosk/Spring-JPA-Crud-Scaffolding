@@ -5,15 +5,17 @@
 package gr.dsigned.springcrudutils;
 
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import gr.dsigned.springcrudutils.data.Dao;
 import gr.dsigned.springcrudutils.data.annotations.FieldType;
 import gr.dsigned.springcrudutils.strategies.RenderStrategy;
 import gr.dsigned.springcrudutils.strategies.RenderStrategyFactory;
-import gr.dsigned.springcrudutils.types.SystemDTO;
 import gr.dsigned.springcrudutils.types.SystemEntity;
 import gr.dsigned.springcrudutils.utils.HibernateDetachUtility;
 import org.springframework.beans.BeanUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,7 +26,7 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
-public class ParameterizedRestCRUDController<E extends SystemEntity, D extends SystemDTO> {
+public class ParameterizedRestCRUDController<E extends SystemEntity> {
 
     private Dao dao;
     private Class<E> entityClass;
@@ -73,15 +75,63 @@ public class ParameterizedRestCRUDController<E extends SystemEntity, D extends S
         response.getWriter().print(renderStrategy.render(model));
     }
 
+    public void update(E entity, BindingResult bindingResult, Map model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        RenderStrategy renderStrategy = RenderStrategyFactory.getRenderStrategy(request);
+        renderStrategy.setup(response);
+        if (bindingResult.hasErrors()) {
+            if (!model.containsKey("item")) {
+                model.put("item", entity);
+            }
+            List<String> errorMessages = Lists.newArrayList();
+            for (ObjectError err : bindingResult.getAllErrors()) {
+                errorMessages.add(err.toString());
+            }
+            model.put("errors", errorMessages);
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        } else {
+            dao.merge(entity);
+            model.clear();
+            HibernateDetachUtility.nullOutUninitializedFields(entity, HibernateDetachUtility.SerializationType.SERIALIZATION);
+            model.put("item", entity);
+        }
+        response.getWriter().print(renderStrategy.render(model));
+    }
+
+    public void create(E entity, BindingResult bindingResult, Map model, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        RenderStrategy renderStrategy = RenderStrategyFactory.getRenderStrategy(request);
+        renderStrategy.setup(response);
+        if (bindingResult.hasErrors()) {
+            if (!model.containsKey("item")) {
+                model.put("item", entity);
+            }
+            List<String> errorMessages = Lists.newArrayList();
+            for (ObjectError err : bindingResult.getAllErrors()) {
+                errorMessages.add(err.toString());
+            }
+            model.put("errors", errorMessages);
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        } else {
+            dao.persist(entity);
+            model.clear();
+            HibernateDetachUtility.nullOutUninitializedFields(entity, HibernateDetachUtility.SerializationType.SERIALIZATION);
+            model.put("item", entity);
+        }
+        response.getWriter().print(renderStrategy.render(model));
+    }
+
+    public void delete(Long id) {
+        dao.removeById(id);
+    }
+
     private Map<String, Map> getAnnotations(Field f) {
         Map<String, Map> annotations = Maps.newLinkedHashMap();
         for (Annotation a : f.getAnnotations()) {
             if (FieldType.class.isInstance(a)) {
                 FieldType lt = (FieldType) a;
                 Map<String, String> annotationData = Maps.newLinkedHashMap();
-                annotationData.put("value",lt.value());
-                annotationData.put("fieldLabel",lt.fieldLabel());
-                annotationData.put("fieldValue",lt.fieldValue());
+                annotationData.put("value", lt.value());
+                annotationData.put("fieldLabel", lt.fieldLabel());
+                annotationData.put("fieldValue", lt.fieldValue());
                 annotations.put(a.annotationType().getSimpleName(), annotationData);
             }
         }
