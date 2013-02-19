@@ -21,3 +21,6 @@
     <type>jar</type>
 </dependency>
 ```
+
+
+[![Build Status](https://travis-ci.org/nikosk/Spring-JPA-Crud-Scaffolding.png)](https://travis-ci.org/nikosk/Spring-JPA-Crud-Scaffolding)
