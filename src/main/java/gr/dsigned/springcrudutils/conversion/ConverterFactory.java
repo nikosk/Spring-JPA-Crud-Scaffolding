@@ -7,7 +7,6 @@ package gr.dsigned.springcrudutils.conversion;
 import gr.dsigned.springcrudutils.types.SystemEntity;
 
 /**
- *
  * @author nk
  */
 public interface ConverterFactory {

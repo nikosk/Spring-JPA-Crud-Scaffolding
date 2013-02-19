@@ -6,9 +6,10 @@ package gr.dsigned.springcrudutils;
 
 import gr.dsigned.springcrudutils.data.Dao;
 import gr.dsigned.springcrudutils.types.SystemEntity;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+
+import javax.servlet.http.HttpServletRequest;
 
 public class ParameterizedCRUDController<E extends SystemEntity> {
 
@@ -18,7 +19,7 @@ public class ParameterizedCRUDController<E extends SystemEntity> {
 
     public ParameterizedCRUDController(Class<E> type, Dao dao) {
         this.dao = dao;
-        this.entityClass = type;        
+        this.entityClass = type;
     }
 
     public ParameterizedCRUDController(Class<E> type, Dao dao, String urlPrefix) {

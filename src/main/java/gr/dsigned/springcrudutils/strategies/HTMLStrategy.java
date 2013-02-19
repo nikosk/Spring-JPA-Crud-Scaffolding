@@ -3,7 +3,6 @@ package gr.dsigned.springcrudutils.strategies;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
  * @author nk
  */
 public class HTMLStrategy<T> extends XMLStrategy<T> {

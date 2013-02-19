@@ -5,9 +5,8 @@
 package gr.dsigned.springcrudutils.types;
 
 /**
- *
  * @author nk
  */
 public interface SystemDTO {
-    
+
 }

@@ -38,7 +38,7 @@ import java.util.*;
 /**
  * This is a single static utility that is used to process any object just prior to sending it over the wire
  * to remote clients (like GWT clients or remote web service clients).
- *
+ * <p/>
  * Essentially this utility scrubs the object of all Hibernate proxies, cleaning it such that it
  * can be serialized over the wire successfully.
  *
@@ -158,19 +158,19 @@ public class HibernateDetachUtility {
     }
 
     /**
-     * @param value the object needing to be detached/scrubbed.
-     * @param checkedObjectMap This maps identityHashCodes to Objects we've already detached. In that way we can
-     * quickly determine if we've already done the work for the incoming value and avoid taversing it again. This
-     * works well almost all of the time, but it is possible that two different objects can have the same identity hash
-     * (conflicts are always possible with a hash). In that case we utilize the checkedObjectCollisionMap (see below).
+     * @param value                     the object needing to be detached/scrubbed.
+     * @param checkedObjectMap          This maps identityHashCodes to Objects we've already detached. In that way we can
+     *                                  quickly determine if we've already done the work for the incoming value and avoid taversing it again. This
+     *                                  works well almost all of the time, but it is possible that two different objects can have the same identity hash
+     *                                  (conflicts are always possible with a hash). In that case we utilize the checkedObjectCollisionMap (see below).
      * @param checkedObjectCollisionMap checkedObjectMap maps the identityhash to the *first* object with that hash. In
-     * most cases there will only be mapping for one hash, but it is possible to encounter the same hash for multiple
-     * objects, especially on 32bit or IBM JVMs. It is important to know if an object has already been detached
-     * because if it is somehow self-referencing, we have to stop the recursion. This map holds the 2nd..Nth mapping
-     * for a single hash and is used to ensure we never try to detach an object already processed.
-     * @param depth used to stop infinite recursion, defaults to a depth we don't expectto see, but it is configurable.
+     *                                  most cases there will only be mapping for one hash, but it is possible to encounter the same hash for multiple
+     *                                  objects, especially on 32bit or IBM JVMs. It is important to know if an object has already been detached
+     *                                  because if it is somehow self-referencing, we have to stop the recursion. This map holds the 2nd..Nth mapping
+     *                                  for a single hash and is used to ensure we never try to detach an object already processed.
+     * @param depth                     used to stop infinite recursion, defaults to a depth we don't expectto see, but it is configurable.
      * @param serializationType
-     * @throws Exception if a problem occurs
+     * @throws Exception             if a problem occurs
      * @throws IllegalStateException if the recursion depth limit is reached
      */
     private static void nullOutUninitializedFields(Object value, Map<Integer, Object> checkedObjectMap,
@@ -312,7 +312,7 @@ public class HibernateDetachUtility {
         } else if (value instanceof Map) {
             Map originalMap = (Map) value;
             HashMap<Object, Object> replaceMap = new HashMap<Object, Object>();
-            for (Iterator i = originalMap.keySet().iterator(); i.hasNext();) {
+            for (Iterator i = originalMap.keySet().iterator(); i.hasNext(); ) {
                 // get original key and value - these might be hibernate proxies
                 Object originalKey = i.next();
                 Object originalKeyValue = originalMap.get(originalKey);
@@ -432,7 +432,7 @@ public class HibernateDetachUtility {
 
                     Class clazz = contextClassLoader == null ? Class.forName(className) : Class.forName(className,
                             true, contextClassLoader);
-                    Class[] constArgs = { Integer.class };
+                    Class[] constArgs = {Integer.class};
                     Constructor construct = null;
 
                     try {
@@ -450,7 +450,7 @@ public class HibernateDetachUtility {
                             if (!idField.isAccessible()) {
                                 idField.setAccessible(true);
                             }
-                            idField.set(replacement, (Integer) ((HibernateProxy) fieldValue)
+                            idField.set(replacement, (Long) ((HibernateProxy) fieldValue)
                                     .getHibernateLazyInitializer().getIdentifier());
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -494,7 +494,7 @@ public class HibernateDetachUtility {
 
                 } else {
                     if (fieldValue != null
-                            && (fieldValue.getClass().getName().contains("org.rhq") || fieldValue instanceof Collection
+                            && (fieldValue.getClass().getName().startsWith("gr.") || fieldValue instanceof Collection
                             || fieldValue instanceof Object[] || fieldValue instanceof Map))
                         nullOutUninitializedFields((fieldValue), checkedObjects, checkedObjectCollisionMap, depth + 1,
                                 serializationType);
@@ -550,7 +550,7 @@ public class HibernateDetachUtility {
 
                     Method writeMethod = pd.getWriteMethod();
                     if ((writeMethod != null) && (writeMethod.getAnnotation(XmlTransient.class) == null)) {
-                        pd.getWriteMethod().invoke(value, new Object[] { null });
+                        pd.getWriteMethod().invoke(value, new Object[]{null});
                     } else {
                         nullOutField(value, pd.getName());
                     }

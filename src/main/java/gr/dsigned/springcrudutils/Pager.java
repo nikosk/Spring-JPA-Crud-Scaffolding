@@ -2,11 +2,11 @@ package gr.dsigned.springcrudutils;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author nk
  */
 public class Pager {
@@ -59,18 +59,19 @@ public class Pager {
         return baseURL + "?sizeNo=" + perPage;
     }
 
-    public String getNextPage(){
-        if(currentPage + 1 >= urls.size()){
+    public String getNextPage() {
+        if (currentPage + 1 >= urls.size()) {
             return getLastPage();
         } else {
-            return urls.get(currentPage+1);
+            return urls.get(currentPage + 1);
         }
     }
-    public String getPreviousPage(){
-        if(currentPage-1 > urls.size()){
+
+    public String getPreviousPage() {
+        if (currentPage - 1 > urls.size()) {
             return getFirstPage();
         } else {
-            return urls.get(currentPage-1);
+            return urls.get(currentPage - 1);
         }
     }
 
@@ -85,7 +86,6 @@ public class Pager {
     public String getBaseURL() {
         return baseURL;
     }
-
 
 
     public int getCurrentPage() {

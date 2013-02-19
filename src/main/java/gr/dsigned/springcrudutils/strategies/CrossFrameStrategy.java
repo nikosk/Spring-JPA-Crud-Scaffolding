@@ -6,10 +6,10 @@ package gr.dsigned.springcrudutils.strategies;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
  * @author nk
  */
 public class CrossFrameStrategy<T> implements RenderStrategy<T> {

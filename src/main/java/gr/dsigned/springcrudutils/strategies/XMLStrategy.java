@@ -5,7 +5,6 @@ import com.thoughtworks.xstream.XStream;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- *
  * @author nk
  */
 public class XMLStrategy<T> implements RenderStrategy<T> {

@@ -1,10 +1,10 @@
 package gr.dsigned.springcrudutils.data;
 
 import gr.dsigned.springcrudutils.types.SystemEntity;
+
 import java.util.List;
 
 public abstract class Dao<K, E> {
-
 
 
     public abstract E persist(E entity);

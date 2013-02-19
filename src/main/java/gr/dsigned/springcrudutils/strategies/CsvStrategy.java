@@ -1,11 +1,10 @@
 package gr.dsigned.springcrudutils.strategies;
 
 
+import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
-
-import javax.servlet.http.HttpServletResponse;
 
 
 public class CsvStrategy<T> implements RenderStrategy<T> {
@@ -41,7 +40,7 @@ public class CsvStrategy<T> implements RenderStrategy<T> {
 
     /**
      * Dynamic checking fields
-     * 
+     *
      * @param obj
      */
     private static String getHeaderFields(Object obj) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
@@ -59,7 +58,7 @@ public class CsvStrategy<T> implements RenderStrategy<T> {
 
     /**
      * Dynamic checking fields
-     * 
+     *
      * @param obj
      */
     private static String checkFields(Object obj) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {

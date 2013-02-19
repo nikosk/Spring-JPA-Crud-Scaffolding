@@ -10,14 +10,15 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- *
  * @author nk
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface FieldType   {
+public @interface FieldType {
 
     public String value();
+
     public String fieldLabel() default "";
+
     public String fieldValue() default "";
 }

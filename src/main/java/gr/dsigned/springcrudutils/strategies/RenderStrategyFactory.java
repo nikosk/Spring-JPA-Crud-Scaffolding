@@ -1,11 +1,11 @@
 package gr.dsigned.springcrudutils.strategies;
 
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import static com.google.common.collect.Lists.*;
+import java.util.List;
+
+import static com.google.common.collect.Lists.newArrayList;
 
 /**
- *
  * @author nk
  */
 public class RenderStrategyFactory {
@@ -28,9 +28,9 @@ public class RenderStrategyFactory {
                 strategy = new XMLStrategy();
             } else if (accept.equals("xfs")) {
                 strategy = new CrossFrameStrategy();
-            } else if(accept.equals("text")){
+            } else if (accept.equals("text")) {
                 strategy = new TextPlainStrategy();
-            } else if(accept.equals("csv")){
+            } else if (accept.equals("csv")) {
                 strategy = new CsvStrategy();
             }
         } else {
@@ -45,13 +45,13 @@ public class RenderStrategyFactory {
                     } else {
                         strategy = new JsonpStrategy(callBack);
                     }
-                } else if(type.getSubType().equals("html")){
+                } else if (type.getSubType().equals("html")) {
                     strategy = new CrossFrameStrategy();
-                } else if(type.getType().equals("text") && type.getSubType().equals("plain")){
+                } else if (type.getType().equals("text") && type.getSubType().equals("plain")) {
                     strategy = new TextPlainStrategy();
                 }
             }
         }
-        return strategy == null ? new HTMLStrategy() : strategy;
+        return strategy == null ? new XMLStrategy() : strategy;
     }
 }

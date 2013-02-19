@@ -14,6 +14,7 @@ package gr.dsigned.springcrudutils.strategies;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
@@ -25,8 +26,6 @@ import java.util.regex.Pattern;
 /**
  * Simple class for parsing and generating Content-Type header values, per
  * RFC 2045 (MIME) and 2616 (HTTP 1.1).
- *
- *
  */
 public class ContentType implements Serializable {
 
@@ -38,22 +37,23 @@ public class ContentType implements Serializable {
     // Matches a media type value
     private static Pattern TYPE_PATTERN = Pattern.compile(
             "(" + TOKEN + ")" + // type  (G1)
-            "/" + // separator
-            "(" + TOKEN + ")" + // subtype (G2)
-            "\\s*(.*)\\s*", Pattern.DOTALL);
+                    "/" + // separator
+                    "(" + TOKEN + ")" + // subtype (G2)
+                    "\\s*(.*)\\s*", Pattern.DOTALL);
     // Matches an attribute value
     private static Pattern ATTR_PATTERN = Pattern.compile(
             "\\s*;\\s*"
-            + "(" + TOKEN + ")" + // attr name  (G1)
-            "\\s*=\\s*"
-            + "(?:"
-            + "\"([^\"]*)\"" + // value as quoted string (G3)
-            "|"
-            + "(" + TOKEN + ")?" + // value as token (G2)
-            ")");
+                    + "(" + TOKEN + ")" + // attr name  (G1)
+                    "\\s*=\\s*"
+                    + "(?:"
+                    + "\"([^\"]*)\"" + // value as quoted string (G3)
+                    "|"
+                    + "(" + TOKEN + ")?" + // value as token (G2)
+                    ")");
     /**
      * Name of the attribute that contains the encoding character set for
      * the content type.
+     *
      * @see #getCharset()
      */
     public static final String ATTR_CHARSET = "charset";
@@ -151,13 +151,13 @@ public class ContentType implements Serializable {
      */
     public static final ContentType MESSAGE_RFC822 =
             new ContentType("message/rfc822").lock();
-    
+
     /**
      * A ContentType constant that indicates that describes the txt/csv content
      * type.
      */
     public static final ContentType CSV = new ContentType("txt/csv").lock();
-    
+
     /**
      * Wildcard content type that will match any MIME type
      */
@@ -177,7 +177,7 @@ public class ContentType implements Serializable {
      * @return the best content type to use (or <code>null</code> on no match).
      */
     public static ContentType getBestContentType(String acceptHeader,
-            List<ContentType> actualContentTypes) {
+                                                 List<ContentType> actualContentTypes) {
 
         // If not accept header is specified, return the first actual type
         if (acceptHeader == null) {
@@ -321,9 +321,14 @@ public class ContentType implements Serializable {
             }
         }
     }
-    /** {@code true} if parsed input didn't contain charset encoding info */
+
+    /**
+     * {@code true} if parsed input didn't contain charset encoding info
+     */
     private boolean inferredCharset = false;
-    /** If set to {@code true}, the object is immutable. */
+    /**
+     * If set to {@code true}, the object is immutable.
+     */
     private boolean locked;
     private String type;
 
@@ -335,6 +340,7 @@ public class ContentType implements Serializable {
         assertNotLocked();
         this.type = type;
     }
+
     private String subType;
 
     public String getSubType() {
@@ -346,7 +352,9 @@ public class ContentType implements Serializable {
         this.subType = subType;
     }
 
-    /** Returns the full media type */
+    /**
+     * Returns the full media type
+     */
     public String getMediaType() {
         StringBuilder sb = new StringBuilder();
         sb.append(type);
@@ -357,11 +365,12 @@ public class ContentType implements Serializable {
         }
         return sb.toString();
     }
+
     private HashMap<String, String> attributes = new HashMap<String, String>();
 
     /**
      * Makes the object immutable and returns it.
-     *
+     * <p/>
      * This should at least be used when keeping a {@link ContentType} instance as
      * a static.
      */
@@ -406,7 +415,7 @@ public class ContentType implements Serializable {
     /**
      * Returns whether this content type is match by the content type found in the
      * "Accept" header field of an HTTP request.
-     *
+     * <p/>
      * <p>For atom content type, this method will check the optional attribute
      * 'type'. If the type attribute is set in both this and {@code
      * acceptedContentType}, then they must be the same. That is, {@code
@@ -427,14 +436,16 @@ public class ContentType implements Serializable {
                 && (!isAtom() || matchAtom(acceptedContentType));
     }
 
-    /** Returns true if this is an atom content type. */
+    /**
+     * Returns true if this is an atom content type.
+     */
     private boolean isAtom() {
         return "application".equals(type) && "atom+xml".equals(subType);
     }
 
     /**
      * Compares the optional 'type' attribute of two content types.
-     *
+     * <p/>
      * <p>This method accepts atom content type without the 'type' attribute
      * but if the types are specified, they must match.
      */
