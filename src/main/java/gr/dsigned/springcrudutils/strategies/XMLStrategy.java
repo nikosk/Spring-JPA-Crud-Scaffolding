@@ -9,6 +9,12 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class XMLStrategy<T> implements RenderStrategy<T> {
 
+    private static final XStream xstream = new XStream();
+    
+    static{
+        xstream.setMode(XStream.XPATH_ABSOLUTE_REFERENCES);
+    }
+
     @Override
     public String render(T data) {
         return marshall(data);
@@ -18,7 +24,7 @@ public class XMLStrategy<T> implements RenderStrategy<T> {
         if (data == null) {
             return null;
         }
-        return new XStream().toXML(data);
+        return xstream.toXML(data);
     }
 
     @Override
