@@ -52,6 +52,6 @@ public class RenderStrategyFactory {
                 }
             }
         }
-        return strategy == null ? new XMLStrategy() : strategy;
+        return strategy == null ? new JsonStrategy() : strategy;
     }
 }

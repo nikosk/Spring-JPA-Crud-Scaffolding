@@ -4,8 +4,11 @@
  */
 package gr.dsigned.springcrudutils.strategies;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import java.text.SimpleDateFormat;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,14 +17,25 @@ import javax.servlet.http.HttpServletResponse;
  */
 public class CrossFrameStrategy<T> implements RenderStrategy<T> {
 
-    protected Gson g = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+    protected ObjectMapper mapper;
+
+    public CrossFrameStrategy() {
+        this.mapper = new ObjectMapper();
+        mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+        mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    }
 
     @Override
     public String render(T data) {
         StringBuilder sb = new StringBuilder();
-        sb.append("<!doctype html><html><head><title></title></head><body><script type='text/javascript'>");
-        sb.append("window.parent.postMessage('").append(g.toJson(data)).append("','*');");
-        sb.append("</script></body></html>");
+        try {
+            sb.append("<!doctype html><html><head><title></title></head><body><script type='text/javascript'>");
+            sb.append("window.parent.postMessage('").append(mapper.writeValueAsString(data)).append("','*');");
+            sb.append("</script></body></html>");
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
         return sb.toString();
     }
 
