@@ -15,7 +15,7 @@ public abstract class Dao<K, E> {
 
     public abstract void removeById(K id);
 
-    public abstract void merge(E entity);
+    public abstract E merge(E entity);
 
     public abstract Long countAll(Class<? extends SystemEntity> entity);
 
