@@ -87,6 +87,14 @@ public class Pager {
         return baseURL;
     }
 
+    public boolean hasNextPage(){
+        return getCurrentPage() + 1 < getTotalPageNumber();
+    }
+
+    public boolean hasPreviousPage() {
+        return getCurrentPage() != 0;
+    }
+
 
     public int getCurrentPage() {
         return currentPage;

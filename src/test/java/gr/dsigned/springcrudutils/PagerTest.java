@@ -10,16 +10,19 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author nk
  */
 public class PagerTest {
 
-    Pager instance = new Pager("/", 100, 2, 10);
+    Pager instance;
 
     @Before
     public void setUp() throws Exception {
+        instance = new Pager("/", 100, 2, 10);
     }
 
     /**
@@ -141,5 +144,28 @@ public class PagerTest {
         int expResult = 10;
         int result = instance.getPerPage();
         assertEquals(expResult, result);
+    }
+
+    /**
+     * Test of hasNextPage method, of class Pager.
+     */
+    @Test
+    public void testHasNextPage() {
+        System.out.println("hasNextPage");
+        assertTrue(instance.hasNextPage());
+        instance.setCurrentPage(instance.getTotalPageNumber());
+        assertFalse(instance.hasNextPage());
+    }
+
+    /**
+     * Test of hasPreviousPage method, of class Pager.
+     */
+    @Test
+    public void testHasPreviousPage() {
+        System.out.println("hasPreviousPage");
+        instance.setCurrentPage(0);
+        assertFalse(instance.hasPreviousPage());
+        instance.setCurrentPage(instance.getTotalPageNumber());
+        assertTrue(instance.hasPreviousPage());
     }
 }
