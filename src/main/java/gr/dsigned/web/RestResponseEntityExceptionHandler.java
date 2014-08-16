@@ -43,7 +43,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
 
         private String key;
 
-        private ErrorMessage(String message, String key) {
+	    public ErrorMessage(String message, String key) {
             this.message = message;
             this.key = key;
         }
