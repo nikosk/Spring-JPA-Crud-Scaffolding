@@ -37,7 +37,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return handleExceptionInternal(ex, null, headers, status, request);
     }
 
-    private static class ErrorMessage {
+    public static class ErrorMessage {
 
         private String message;
 
